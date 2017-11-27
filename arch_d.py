@@ -23,21 +23,23 @@ class arch_d(torch.nn.Module):
         self.conv = models.vgg16(True).features
         # define shared FC layer
         self.share = nn.Sequential()
-        self.share.add_module("fc_share", nn.Linear(25088, 4096))     # 25088 -> 4096
+        self.share.add_module("fc_share", nn.Linear(25088, 4096)) # 25088 -> 4096
         self.share.add_module("relu_share", nn.ReLU(True))
         self.share.add_module("dropout_share", nn.Dropout())
         # define output path for category prediction
         self.cate = nn.Sequential()
-        self.cate.add_module("fc_cate_1", nn.Linear(4096, 1000))   # 4096 -> 1000
-        self.cate.add_module("relu_cate_1", nn.ReLU(True))
-        self.cate.add_module("dropout_cate_1", nn.Dropout())
-        self.cate.add_module("fc_cate_out", nn.Linear(1000, 172))  # 1000 -> 172
+        self.cate.add_module("cate_fc_1", nn.Linear(4096, 4096))  # 4096 -> 4096
+        self.cate.add_module("cate_1relu_", nn.ReLU(True))
+        self.cate.add_module("cate_dropout_1", nn.Dropout())
+        self.cate.add_module("cate_fc_2", nn.Linear(4096, 172))   # 4096 -> 172
+        self.cate.add_module("softmax_cate", nn.LogSoftmax())
         # define output path for ingredient prediction
         self.ingr = nn.Sequential()
-        self.ingr.add_module("fc_ingr_1", nn.Linear(4096, 1000))   # 4096 -> 1000
-        self.ingr.add_module("relu_ingr_1", nn.ReLU(True))
-        self.ingr.add_module("dropout_ingr_1", nn.Dropout())
-        self.ingr.add_module("fc_ingr_out", nn.Linear(1000, 353))  # 1000 -> 353
+        self.ingr.add_module("ingr_fc_1", nn.Linear(4096, 1024))  # 4096 -> 1024
+        self.ingr.add_module("ingr_relu_1", nn.ReLU(True))
+        self.ingr.add_module("ingr_dropout_1", nn.Dropout())
+        self.ingr.add_module("ingr_fc_2", nn.Linear(1024, 353))   # 1024 -> 353
+        self.ingr.add_module("sigmoid_ingr", nn.Sigmoid())
 
     def forward(self, x):
         x = self.conv.forward(x)
@@ -45,8 +47,7 @@ class arch_d(torch.nn.Module):
         x = self.share(x)
         cate_out = self.cate(x)
         ingr_out = self.ingr(x)
-        return cate_out
-        # return cate_out, ingr_out
+        return cate_out, ingr_out
 
 def main():
     # initialize environment vars
@@ -62,6 +63,15 @@ def main():
 
     if use_gpu:
         model = model.cuda()
+
+
+
+    # cate_predict, ingr_predict = model(img)
+    # loss1 = criterion1(cate_predict, target1)
+    # loss2 = criterion2(ingr_predict, target2)
+    # loss = loss1 + LAMBDA * loss2
+    # loss.backward()
+
 
 if __name__ == "__main__":
     main()

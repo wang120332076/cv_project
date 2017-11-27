@@ -13,6 +13,8 @@ from torch.optim import lr_scheduler
 from torchvision import models, transforms, datasets
 import numpy as np
 import matplotlib.pyplot as plt
+from arch_d import arch_d
+from my_set import my_set
 
 plt.ion()
 
@@ -56,11 +58,25 @@ data_transforms = {
 data_dirname = '../vireo172/vireo172_lite'
 sets_name = ['train', 'val']
 label_filename = '../vireo172/SplitAndIngreLabel/FoodList.txt'
+ingr_filename = '../vireo172/SplitAndIngreLabel/IngreLabel.txt'
 use_gpu = torch.cuda.is_available()
 
+# read in ingredient label list
+with open(ingr_filename, 'r') as f:
+    lines = f.readlines()
+
+ingr_label = {}
+for ll in lines:
+    str_l = ll.strip().split()
+    name = str_l[0]
+    str_l = str_l[1:-1]
+    int_l = [int(x) for x in str_l]
+    out = torch.FloatTensor(int_l).view(1, -1)
+    ingr_label[name] = out
+
 # create dataset objects using pyTorch provided methods
-image_datasets = {x: datasets.ImageFolder(os.path.join(data_dirname, x),
-                                          data_transforms[x])
+image_datasets = {x: my_set(os.path.join(data_dirname, x), ingr_label,
+                                         data_transforms[x])
                   for x in sets_name}
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
                                               shuffle=True, num_workers=2)
@@ -73,7 +89,8 @@ with open(label_filename, 'r') as f:
 # labels = [labels[int(x)-1] for x in class_names]
 
 # define training process
-def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
+def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):
+    LAMBDA = 0.5
     since = time.time()
 
     best_model_wts = model.state_dict()
@@ -97,22 +114,27 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             # Iterate over data.
             for data in dataloaders[phase]:
                 # get the inputs
-                inputs, labels = data
+                inputs, cate_l, ingr_l = data
 
                 # wrap them in Variable
                 if use_gpu:
                     inputs = Variable(inputs.cuda())
-                    labels = Variable(labels.cuda())
+                    cate_l = Variable(cate_l.cuda())
+                    ingr_l = Variable(ingr_l.cuda())
                 else:
-                    inputs, labels = Variable(inputs), Variable(labels)
+                    inputs = Variable(inputs)
+                    cate_l = Variable(cate_l)
+                    ingr_l = Variable(ingr_l)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
 
                 # forward
-                outputs = model(inputs)
-                _, preds = torch.max(outputs.data, 1)
-                loss = criterion(outputs, labels)
+                cate_pred, ingr_pred = model(inputs)
+                _, preds = torch.max(cate_pred, 1)
+                loss1 = criterion1(cate_pred, cate_l)
+                loss2 = criterion2(ingr_pred, ingr_l)
+                loss = loss1 + LAMBDA * loss2
 
                 # backward + optimize only if in training phase
                 if phase == 'train':
@@ -126,7 +148,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects / dataset_sizes[phase]
 
-            print('{} Loss: {:.4f} Acc: {:.4f}'.format(
+            print('{} Loss: {:.4f} Acc (category): {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
 
             # deep copy the model
@@ -171,61 +193,38 @@ def visualize_model(model, num_images=6):
             if images_so_far == num_images:
                 return
 
-################### VGG-16
-# create pre-trained VGG16
-vgg16 = models.vgg16(pretrained = True)
-for param in vgg16.parameters():
-    param.requires_grad = False     # freeze parameters
+################### Arch-D based on VGG16
+# instantiate the modified CNN model
+model = arch_d()
 
-# modify FC layers
-vgg16.classifier._modules['6'] = nn.Linear(4096, 172)
+# freeze parameters in conv layers
+for param in model.conv.parameters():
+    param.requires_grad = False
+
 if use_gpu:
-    vgg16 = vgg16.cuda()
+    model = model.cuda()
 
 # prepare for training
-criterion = nn.CrossEntropyLoss()
+L1 = nn.NLLLoss()
+L2 = nn.BCELoss()
 
 # Observe that only parameters of final layer are being optimized as
 # opoosed to before.
-optimizer_conv = optim.SGD(vgg16.classifier._modules['6'].parameters(),
-                           lr=0.001, momentum=0.9)
+optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + list(model.ingr.parameters())
+optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
 # start training
-vgg16 = train_model(vgg16, criterion, optimizer_conv, exp_lr_scheduler, 25)
+model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 25)
 
 # show results
-visualize_model(vgg16)
+# visualize_model(model)
 
 # save trained model
-torch.save(vgg16, './vgg16_out.pth')
+torch.save(model, './arch_d.pth')
 
-################### ResNet-18
-# resnet = models.resnet18(True)
-# for param in resnet.parameters():
-#     param.requires_grad = False     # freeze parameters
-
-# resnet.fc = nn.Linear(512, 172)
-# # resnet.fc = nn.Linear(2048, 172)  # for ResNet-101
-# if use_gpu:
-#     resnet = resnet.cuda()
-# criterion = nn.CrossEntropyLoss()
-# optimizer_conv = optim.SGD(resnet.fc.parameters(),
-#                            lr=0.001, momentum=0.9)
-# exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
-# resnet = train_model(resnet, criterion, optimizer_conv, exp_lr_scheduler, 25)
-
-# visualize_model(resnet)
-
-# # save trained model
-# torch.save(resnet, './resnet18_out.pth')
-
-# example code for visualizing images in dataset
-# im, lab_n = next(iter(dataloaders['train']))
-# out = torchvision.utils.make_grid(im)
-# imshow(out, [labels[x] for x in lab_n])
 
 plt.ioff()
 plt.show()
