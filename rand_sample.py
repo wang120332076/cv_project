@@ -37,6 +37,13 @@ for xx in lines:
     total_list[ind].append(xx)
 len_list = [len(x) for x in total_list]
 
+#judge the path exist or not
+for ii in range(173):
+    if ii and not os.path.exists(dst_PATH+'/train/' + str(ii)) :
+        os.mkdir(dst_PATH+'/train/' + str(ii))
+    if ii and not os.path.exists(dst_PATH+'/val/' + str(ii)) :
+        os.mkdir(dst_PATH+'/val/' + str(ii))
+
 # generate smaller training and validation sets
 for f_list in total_list:
     N = len(f_list)
