@@ -59,6 +59,7 @@ data_dirname = '../vireo172/vireo172_lite'
 sets_name = ['train', 'val']
 label_filename = '../vireo172/SplitAndIngreLabel/FoodList.txt'
 ingr_filename = '../vireo172/SplitAndIngreLabel/IngreLabel.txt'
+save_name = './arch_d.pth'
 use_gpu = torch.cuda.is_available()
 
 # read in ingredient label list
@@ -194,13 +195,17 @@ def visualize_model(model, num_images=6):
                 return
 
 ################### Arch-D based on VGG16
-# instantiate the modified CNN model
-model = arch_d()
+if os.path.exists(save_name):
+    model = torch.load(save_name)
+    os.rename(save_name, save_name+'.old')
+else:
+    # instantiate the modified CNN model
+    model = arch_d()
+    # freeze parameters in conv layers
+    for param in model.conv.parameters():
+        param.requires_grad = False
 
-# freeze parameters in conv layers
-for param in model.conv.parameters():
-    param.requires_grad = False
-
+# check if we can use GPU
 if use_gpu:
     model = model.cuda()
 
@@ -217,13 +222,13 @@ optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
 # start training
-model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 1)
+model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 15)
 
 # show results
 # visualize_model(model)
 
 # save trained model
-torch.save(model, './arch_d.pth')
+torch.save(model, save_name)
 
 
 plt.ioff()

@@ -9,8 +9,8 @@ train_NAME = '../vireo172/SplitAndIngreLabel/TR.txt'
 val_NAME = '../vireo172/SplitAndIngreLabel/VAL.txt'
 test_NAME = '../vireo172/SplitAndIngreLabel/TE.txt'
 
-train_N = 16
-val_N = 4
+train_N = 135
+val_N = 56
 total_N = train_N + val_N
 
 total_list = [[] for x in range(172)]

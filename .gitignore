@@ -105,4 +105,5 @@ ENV/
 
 # pycharm workspace
 .idea/*
-__pycache__/*
+*.pth
+*.pth.old
