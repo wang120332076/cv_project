@@ -173,11 +173,11 @@ def visualize_model(model, num_images=6):
     fig = plt.figure()
 
     for i, data in enumerate(dataloaders['val']):
-        inputs, labels = data
+        inputs, cate_l, ingr_l = data
         if use_gpu:
-            inputs, labels = Variable(inputs.cuda()), Variable(labels.cuda())
+            inputs, cate_l, ingr_l = Variable(inputs.cuda()), Variable(cate_l.cuda()), Variable(ingr_l.cuda())
         else:
-            inputs, labels = Variable(inputs), Variable(labels)
+            inputs, cate_l, ingr_l = Variable(inputs), Variable(cate_l), Variable(ingr_l)
 
         outputs = model(inputs)
         _, preds = torch.max(outputs.data, 1)
@@ -188,7 +188,7 @@ def visualize_model(model, num_images=6):
             ax.axis('off')
             ax.set_title('predicted: {}'.format(class_names[preds[j]]))
             print(class_names[preds[j]])
-            print(labels[preds[j]])
+            print(cate_l[preds[j]])
             imshow(inputs.cpu().data[j])
 
             if images_so_far == num_images:
