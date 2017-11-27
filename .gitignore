@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# vscode workspace config
+.vscode/tags
+
+# pycharm workspace
+.idea/*
+__pycache__/*
