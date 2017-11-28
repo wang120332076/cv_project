@@ -1,0 +1,24 @@
+#!/bin/bash
+# identity
+#PBS -W group_list=newriver
+#PBS -A cv_fall_2017
+
+# request resources
+#PBS -l nodes=1:ppn=28
+#PBS -l walltime=6:00:00
+#PBS -q p100_normal_q
+
+# set up email alert
+#PBS -M chenhao7@vt.edu
+#PBS -m bea
+
+module purge
+
+cd $PBS_O_WORKDIR
+
+python3 training.py
+
+# Execute command
+
+exit;
+

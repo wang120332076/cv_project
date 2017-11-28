@@ -13,7 +13,7 @@ from torch.optim import lr_scheduler
 from torchvision import models, transforms, datasets
 import numpy as np
 import matplotlib.pyplot as plt
-from arch_d import arch_d
+from arch_d import arch_d, arch_d_res50
 from my_set import my_set
 
 plt.ion()
@@ -63,7 +63,7 @@ save_name = './arch_d.pth'
 use_gpu = torch.cuda.is_available()
 
 # read in ingredient label list
-with open(ingr_filename, 'r') as f:
+with open(ingr_filename, 'r', encoding="utf-8") as f:
     lines = f.readlines()
 
 ingr_label = {}
@@ -85,7 +85,7 @@ dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
 dataset_sizes = {x: len(image_datasets[x]) for x in sets_name}
 class_names = image_datasets['train'].classes
 # create label list
-with open(label_filename, 'r') as f:
+with open(label_filename, 'r', encoding="utf-8") as f:
     cate_labels = f.read().splitlines()
 # labels = [labels[int(x)-1] for x in class_names]
 
@@ -200,10 +200,12 @@ if os.path.exists(save_name):
     os.rename(save_name, save_name+'.old')
 else:
     # instantiate the modified CNN model
-    model = arch_d()
+    model = arch_d(False)
     # freeze parameters in conv layers
-    for param in model.conv.parameters():
-        param.requires_grad = False
+    #for param in model.conv.parameters():
+    #    param.requires_grad = False
+    #for param in model.conv.fc.parameters():
+    #    param.requires_grad = True
 
 # check if we can use GPU
 if use_gpu:
@@ -215,14 +217,17 @@ L2 = nn.BCELoss()
 
 # Observe that only parameters of final layer are being optimized as
 # opoosed to before.
-optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + list(model.ingr.parameters())
+optim_params = model.parameters()
+# optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + list(model.ingr.parameters())
+# optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
+               # list(model.ingr.parameters()) + list(model.conv.fc.parameters())
 optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
 # start training
-model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 15)
+model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 30)
 
 # show results
 # visualize_model(model)
