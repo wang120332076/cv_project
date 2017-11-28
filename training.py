@@ -179,8 +179,8 @@ def visualize_model(model, num_images=6):
         else:
             inputs, cate_l, ingr_l = Variable(inputs), Variable(cate_l), Variable(ingr_l)
 
-        outputs = model(inputs)
-        _, preds = torch.max(outputs.data, 1)
+        cate_pred, ingr_pred = model(inputs)
+        _, preds = torch.max(cate_pred.data, 1)
 
         for j in range(inputs.size()[0]):
             images_so_far += 1
