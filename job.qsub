@@ -5,7 +5,7 @@
 
 # request resources
 #PBS -l nodes=1:ppn=28
-#PBS -l walltime=6:00:00
+#PBS -l walltime=3:00:00:00
 #PBS -q p100_normal_q
 
 # set up email alert
@@ -16,7 +16,7 @@ module purge
 
 cd $PBS_O_WORKDIR
 
-python3 training.py
+python3 train_full_set.py
 
 # Execute command
 
