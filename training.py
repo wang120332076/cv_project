@@ -18,6 +18,19 @@ from my_set import my_set
 
 plt.ion()
 
+#Function for calculate micro f1 and macro f1
+##########################
+def ingredient_accuracy(predict, ground_truth):
+    #input should be 4*353 tensors.
+    predict = predict>0.5
+    TP = sum(sum(predict * ground_truth))
+    TN = sum(sum((1 - predict) * (1 - ground_truth)))
+    FP = sum(sum(predict * (1 - ground_truth)))
+    FN = sum(sum((1 - predict) * ground_truth))
+    return TP, TN, FP, FN
+
+##########################
+
 # Function for visualizing images
 def imshow(inp, title=None):
     inp = inp.numpy().transpose((1, 2, 0))
@@ -112,6 +125,9 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
             running_loss = 0.0
             running_corrects = 0
 
+            #intialize parameters for calculating ingredients' accuracy
+            sum_TP = 0; sum_FP = 0; sum_FN = 0; sum_R = 0; sum_P = 0; sum_number = 0;
+
             # Iterate over data.
             for data in dataloaders[phase]:
                 # get the inputs
@@ -146,11 +162,32 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
                 running_loss += loss.data[0]
                 running_corrects += torch.sum(preds.data == cate_l.data)
 
+                TP, TN, FP, FN = ingredient_accuracy(ingr_pred.data,ingr_l.data)
+                sum_TP += TP
+                sum_FP += FP
+                sum_FN += FN
+                sum_R += TP/(TP+FN)
+                sum_P += TP/(TP+FP)
+                sum_number += 1
+
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects / dataset_sizes[phase]
 
             print('{} Loss: {:.4f} Acc (category): {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
+
+            epoch_P1 = sum_TP/(sum_TP+sum_FP)
+            epoch_R1 = sum_TP/(sum_TP+sum_FN)
+            epoch_micro = 2*epoch_P1*epoch_R1/(epoch_P1+epoch_R1)
+
+            epoch_R2 = sum_R/sum_number
+            epoch_P2 = sum_P/sum_number
+            epoch_macro = 2*epoch_P2*epoch_R2/(epoch_P2+epoch_R2)
+
+            print('{}Ingredients: micro f1: {:.4f} macro f1: {:.4f}'.format(
+                phase, epoch_micro, epoch_macro))
+
+
 
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
@@ -179,8 +216,8 @@ def visualize_model(model, num_images=6):
         else:
             inputs, cate_l, ingr_l = Variable(inputs), Variable(cate_l), Variable(ingr_l)
 
-        outputs = model(inputs)
-        _, preds = torch.max(outputs.data, 1)
+        cate_pred, ingr_pred = model(inputs)
+        _, preds = torch.max(cate_pred.data, 1)
 
         for j in range(inputs.size()[0]):
             images_so_far += 1
