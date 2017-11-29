@@ -21,12 +21,12 @@ plt.ion()
 # Function for calculate micro f1 and macro f1
 def ingredient_accuracy(predict, truth):
     # input should be 4*353 tensors.
-    #predict = predict>0.5
-    _, ind = torch.topk(predict, 3)        # grab 3 ingr with max score as prediction
-    predict = predict * 0
-    for x in range(predict.size()[0]):
-        for y in ind[x,:]:
-            predict[x, y] = 1
+    predict = predict>0.5
+    # _, ind = torch.topk(predict, 3)        # grab 3 ingr with max score as prediction
+    # predict = predict * 0
+    # for x in range(predict.size()[0]):
+    #     for y in ind[x,:]:
+    #         predict[x, y] = 1
     predict = predict.float()
     TP = torch.sum(predict * truth)
     TN = torch.sum((1 - predict) * (1 - truth))
@@ -186,11 +186,13 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
                 epoch_P1 = sum_TP/(sum_TP+sum_FP)
             if (sum_TP+sum_FN != 0):
                 epoch_R1 = sum_TP/(sum_TP+sum_FN)
-            epoch_micro = 2*epoch_P1*epoch_R1/(epoch_P1+epoch_R1)
+            if (epoch_P1+epoch_R1 != 0):
+                epoch_micro = 2*epoch_P1*epoch_R1/(epoch_P1+epoch_R1)
 
-            epoch_R2 = sum_R/dataset_sizes[phase]
-            epoch_P2 = sum_P/dataset_sizes[phase]
-            epoch_macro = 2*epoch_P2*epoch_R2/(epoch_P2+epoch_R2)
+            epoch_R2 = sum_R / dataset_sizes[phase] * dataloaders[phase].batch_size
+            epoch_P2 = sum_P / dataset_sizes[phase] * dataloaders[phase].batch_size
+            if (epoch_P2+epoch_R2 != 0):
+                epoch_macro = 2*epoch_P2*epoch_R2/(epoch_P2+epoch_R2)
 
             print('{} Ingr acc: micro f1: {:.4f} macro f1: {:.4f}'.format(
                 phase, epoch_micro, epoch_macro))
