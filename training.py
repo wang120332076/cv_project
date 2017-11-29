@@ -18,15 +18,20 @@ from my_set import my_set
 
 plt.ion()
 
-#Function for calculate micro f1 and macro f1
-def ingredient_accuracy(predict, ground_truth):
-    #input should be 4*353 tensors.
-    predict = predict>0.5
+# Function for calculate micro f1 and macro f1
+def ingredient_accuracy(predict, truth):
+    # input should be 4*353 tensors.
+    #predict = predict>0.5
+    _, ind = torch.topk(predict, 3)        # grab 3 ingr with max score as prediction
+    predict = predict * 0
+    for x in range(predict.size()[0]):
+        for y in ind[x,:]:
+            predict[x, y] = 1
     predict = predict.float()
-    TP = sum(sum(predict * ground_truth))
-    TN = sum(sum((1 - predict) * (1 - ground_truth)))
-    FP = sum(sum(predict * (1 - ground_truth)))
-    FN = sum(sum((1 - predict) * ground_truth))
+    TP = torch.sum(predict * truth)
+    TN = torch.sum((1 - predict) * (1 - truth))
+    FP = torch.sum(predict * (1 - truth))
+    FN = torch.sum((1 - predict) * truth)
     return TP, TN, FP, FN
 
 # Function for visualizing images
@@ -102,7 +107,7 @@ with open(label_filename, 'r', encoding="utf-8") as f:
 
 # define training process
 def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):
-    LAMBDA = 0.02
+    LAMBDA = 0.2
     since = time.time()
 
     best_model_wts = model.state_dict()
@@ -160,12 +165,14 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
                 running_loss += loss.data[0]
                 running_corrects += torch.sum(preds.data == cate_l.data)
 
-                TP, TN, FP, FN = ingredient_accuracy(ingr_pred.data,ingr_l.data)
+                TP, TN, FP, FN = ingredient_accuracy(ingr_pred.data, ingr_l.data)
                 sum_TP += TP
                 sum_FP += FP
                 sum_FN += FN
-                sum_R += TP/(TP+FN)
-                sum_P += TP/(TP+FP)
+                if (TP+FN != 0):
+                    sum_R += TP/(TP+FN)
+                if (TP+FP != 0):
+                    sum_P += TP/(TP+FP)
 
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects / dataset_sizes[phase]
@@ -174,8 +181,10 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
                 phase, epoch_loss, epoch_acc))
 
             # calculate the accuracy for ingredient prediction result
-            epoch_P1 = sum_TP/(sum_TP+sum_FP)
-            epoch_R1 = sum_TP/(sum_TP+sum_FN)
+            if (sum_TP+sum_FP != 0):
+                epoch_P1 = sum_TP/(sum_TP+sum_FP)
+            if (sum_TP+sum_FN != 0):
+                epoch_R1 = sum_TP/(sum_TP+sum_FN)
             epoch_micro = 2*epoch_P1*epoch_R1/(epoch_P1+epoch_R1)
 
             epoch_R2 = sum_R/dataset_sizes[phase]
@@ -259,13 +268,13 @@ optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
 # start training
-model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 30)
+model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 20)
 
 # show results
 # visualize_model(model)
 
 # save trained model
-torch.save(model, save_name)
+torch.save(model.cpu(), save_name)
 
 
 plt.ioff()

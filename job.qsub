@@ -12,13 +12,15 @@
 #PBS -M chenhao7@vt.edu
 #PBS -m bea
 
+# Prepare environment
 module purge
 
 cd $PBS_O_WORKDIR
 
-python3 train_full_set.py
-
 # Execute command
+
+#python3 train_full_set.py
+python3 training.py
 
 exit;
 
