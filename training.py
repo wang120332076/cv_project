@@ -108,6 +108,7 @@ with open(label_filename, 'r', encoding="utf-8") as f:
 # define training process
 def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):
     LAMBDA = 0.2
+    COMPENSATE = 353
     since = time.time()
 
     best_model_wts = model.state_dict()
@@ -154,7 +155,7 @@ def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=
                 _, preds = torch.max(cate_pred, 1)
                 loss1 = criterion1(cate_pred, cate_l)
                 loss2 = criterion2(ingr_pred, ingr_l)
-                loss = loss1 + LAMBDA * loss2
+                loss = loss1 + LAMBDA * COMPENSATE * loss2
 
                 # backward + optimize only if in training phase
                 if phase == 'train':

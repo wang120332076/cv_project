@@ -6,46 +6,66 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 IMG_EXTENSIONS	../my_set.py	/^IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']$/;"	kind:variable	line:7
 IMG_URL	../test.py	/^IMG_URL = 'https:\/\/s3.amazonaws.com\/outcome-blog\/wp-content\/uploads\/2017\/02\/25192225\/cat.jpg'$/;"	kind:variable	line:9
-L1	../training.py	/^L1 = nn.NLLLoss()$/;"	kind:variable	line:203
-L2	../training.py	/^L2 = nn.BCELoss()$/;"	kind:variable	line:204
+L1	../train_full_set.py	/^L1 = nn.NLLLoss()$/;"	kind:variable	line:254
+L1	../training.py	/^L1 = nn.NLLLoss()$/;"	kind:variable	line:256
+L2	../train_full_set.py	/^L2 = nn.BCELoss()$/;"	kind:variable	line:255
+L2	../training.py	/^L2 = nn.BCELoss()$/;"	kind:variable	line:257
 LABELS_URL	../test.py	/^LABELS_URL = 'https:\/\/s3.amazonaws.com\/outcome-blog\/imagenet\/labels.json'$/;"	kind:variable	line:8
 N	../rand_sample.py	/^    N = len(f_list)$/;"	kind:variable	line:49
 __getitem__	../my_set.py	/^    def __getitem__(self, index):$/;"	kind:member	line:88
-__init__	../arch_d.py	/^    def __init__(self):$/;"	kind:member	line:19
+__init__	../arch_d.py	/^    def __init__(self):$/;"	kind:member	line:55
+__init__	../arch_d.py	/^    def __init__(self, preTrained=False):$/;"	kind:member	line:19
 __init__	../my_set.py	/^    def __init__(self, root, ingr_dict, transform=None, target_transform=None,$/;"	kind:member	line:71
 __len__	../my_set.py	/^    def __len__(self):$/;"	kind:member	line:111
 accimage_loader	../my_set.py	/^def accimage_loader(path):$/;"	kind:function	line:53
 arch_d	../arch_d.py	/^class arch_d(torch.nn.Module):$/;"	kind:class	line:18
 arch_d.py	../arch_d.py	1;"	kind:file	line:1
-class_names	../training.py	/^class_names = image_datasets['train'].classes$/;"	kind:variable	line:85
-data_dirname	../training.py	/^data_dirname = '..\/vireo172\/vireo172_lite'$/;"	kind:variable	line:58
-data_transforms	../training.py	/^data_transforms = {$/;"	kind:variable	line:36
-dataloaders	../training.py	/^dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,$/;"	kind:variable	line:81
-dataset_sizes	../training.py	/^dataset_sizes = {x: len(image_datasets[x]) for x in sets_name}$/;"	kind:variable	line:84
+arch_d_res50	../arch_d.py	/^class arch_d_res50(torch.nn.Module):$/;"	kind:class	line:54
+cate_labels	../train_full_set.py	/^    cate_labels = f.read().splitlines()$/;"	kind:variable	line:105
+cate_labels	../training.py	/^    cate_labels = f.read().splitlines()$/;"	kind:variable	line:105
+class_names	../train_full_set.py	/^class_names = image_datasets['train'].classes$/;"	kind:variable	line:102
+class_names	../training.py	/^class_names = image_datasets['train'].classes$/;"	kind:variable	line:102
+data_dirname	../train_full_set.py	/^data_dirname = '..\/vireo172\/vireo172_sets'$/;"	kind:variable	line:74
+data_dirname	../training.py	/^data_dirname = '..\/vireo172\/vireo172_lite'$/;"	kind:variable	line:74
+data_transforms	../train_full_set.py	/^data_transforms = {$/;"	kind:variable	line:52
+data_transforms	../training.py	/^data_transforms = {$/;"	kind:variable	line:52
+dataloaders	../train_full_set.py	/^dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,$/;"	kind:variable	line:98
+dataloaders	../training.py	/^dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,$/;"	kind:variable	line:98
+dataset_sizes	../train_full_set.py	/^dataset_sizes = {x: len(image_datasets[x]) for x in sets_name}$/;"	kind:variable	line:101
+dataset_sizes	../training.py	/^dataset_sizes = {x: len(image_datasets[x]) for x in sets_name}$/;"	kind:variable	line:101
 default_loader	../my_set.py	/^def default_loader(path):$/;"	kind:function	line:62
 dst_PATH	../rand_sample.py	/^dst_PATH = '..\/vireo172\/vireo172_lite'$/;"	kind:variable	line:6
 dst_PATH	../rearrange_vireo172.py	/^dst_PATH = '..\/vireo172\/vireo172_sets'$/;"	kind:variable	line:5
-exp_lr_scheduler	../training.py	/^exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)$/;"	kind:variable	line:212
+exp_lr_scheduler	../train_full_set.py	/^exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=4, gamma=0.1)$/;"	kind:variable	line:266
+exp_lr_scheduler	../training.py	/^exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)$/;"	kind:variable	line:268
 fc_out	../test.py	/^fc_out = vgg16(img_variable)$/;"	kind:variable	line:34
 find_classes	../my_set.py	/^def find_classes(dir):$/;"	kind:function	line:21
 fn	../rand_sample.py	/^        fn = f_list[ii]$/;"	kind:variable	line:55
 fn	../rand_sample.py	/^        fn = f_list[ii]$/;"	kind:variable	line:58
 forward	../arch_d.py	/^    def forward(self, x):$/;"	kind:member	line:44
-image_datasets	../training.py	/^image_datasets = {x: my_set(os.path.join(data_dirname, x), ingr_label,$/;"	kind:variable	line:78
+forward	../arch_d.py	/^    def forward(self, x):$/;"	kind:member	line:80
+image_datasets	../train_full_set.py	/^image_datasets = {x: my_set(os.path.join(data_dirname, x), ingr_label,$/;"	kind:variable	line:95
+image_datasets	../training.py	/^image_datasets = {x: my_set(os.path.join(data_dirname, x), ingr_label,$/;"	kind:variable	line:95
 img_pil	../test.py	/^img_pil = Image.open(io.BytesIO(response.content))$/;"	kind:variable	line:24
 img_tensor	../test.py	/^img_tensor = preprocess(img_pil)$/;"	kind:variable	line:28
 img_variable	../test.py	/^img_variable = Variable(img_tensor)$/;"	kind:variable	line:33
-imshow	../training.py	/^def imshow(inp, title=None):$/;"	kind:function	line:22
+imshow	../train_full_set.py	/^def imshow(inp, title=None):$/;"	kind:function	line:38
+imshow	../training.py	/^def imshow(inp, title=None):$/;"	kind:function	line:38
 ind	../rand_sample.py	/^    ind = int(temp[0]) - 1$/;"	kind:variable	line:22
 ind	../rand_sample.py	/^    ind = int(temp[0]) - 1$/;"	kind:variable	line:29
 ind	../rand_sample.py	/^    ind = int(temp[0]) - 1$/;"	kind:variable	line:36
-ingr_filename	../training.py	/^ingr_filename = '..\/vireo172\/SplitAndIngreLabel\/IngreLabel.txt'$/;"	kind:variable	line:61
-ingr_label	../training.py	/^ingr_label = {}$/;"	kind:variable	line:68
-int_l	../training.py	/^    int_l = [int(x) for x in str_l]$/;"	kind:variable	line:73
+ingr_filename	../train_full_set.py	/^ingr_filename = '..\/vireo172\/SplitAndIngreLabel\/IngreLabel.txt'$/;"	kind:variable	line:77
+ingr_filename	../training.py	/^ingr_filename = '..\/vireo172\/SplitAndIngreLabel\/IngreLabel.txt'$/;"	kind:variable	line:77
+ingr_label	../train_full_set.py	/^ingr_label = {}$/;"	kind:variable	line:85
+ingr_label	../training.py	/^ingr_label = {}$/;"	kind:variable	line:85
+ingredient_accuracy	../train_full_set.py	/^def ingredient_accuracy(predict, truth):$/;"	kind:function	line:22
+ingredient_accuracy	../training.py	/^def ingredient_accuracy(predict, truth):$/;"	kind:function	line:22
+int_l	../train_full_set.py	/^    int_l = [0 if int(x)==(-1) else 1 for x in str_l]$/;"	kind:variable	line:90
+int_l	../training.py	/^    int_l = [0 if int(x)==(-1) else 1 for x in str_l]$/;"	kind:variable	line:90
 is_image_file	../my_set.py	/^def is_image_file(filename):$/;"	kind:function	line:10
-label_filename	../training.py	/^label_filename = '..\/vireo172\/SplitAndIngreLabel\/FoodList.txt'$/;"	kind:variable	line:60
+label_filename	../train_full_set.py	/^label_filename = '..\/vireo172\/SplitAndIngreLabel\/FoodList.txt'$/;"	kind:variable	line:76
+label_filename	../training.py	/^label_filename = '..\/vireo172\/SplitAndIngreLabel\/FoodList.txt'$/;"	kind:variable	line:76
 labels	../test.py	/^labels = {int(key):value for (key, value)$/;"	kind:variable	line:25
-labels	../training.py	/^    labels = f.read().splitlines()$/;"	kind:variable	line:88
 len_list	../rand_sample.py	/^len_list = [len(x) for x in total_list]$/;"	kind:variable	line:38
 lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:19
 lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:26
@@ -53,21 +73,34 @@ lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	li
 lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:12
 lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:17
 lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:22
-lines	../training.py	/^    lines = f.readlines()$/;"	kind:variable	line:66
-main	../arch_d.py	/^def main():$/;"	kind:function	line:52
+lines	../train_full_set.py	/^    lines = f.readlines()$/;"	kind:variable	line:83
+lines	../training.py	/^    lines = f.readlines()$/;"	kind:variable	line:83
+main	../arch_d.py	/^def main():$/;"	kind:function	line:87
 make_dataset	../my_set.py	/^def make_dataset(dir, class_to_idx):$/;"	kind:function	line:28
 mean	../test.py	/^   mean=[0.485, 0.456, 0.406],$/;"	kind:variable	line:13
-model	../training.py	/^    model = model.cuda()$/;"	kind:variable	line:200
-model	../training.py	/^model = arch_d()$/;"	kind:variable	line:193
-model	../training.py	/^model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 25)$/;"	kind:variable	line:215
+model	../train_full_set.py	/^    model = arch_d(False)$/;"	kind:variable	line:244
+model	../train_full_set.py	/^    model = model.cuda()$/;"	kind:variable	line:251
+model	../train_full_set.py	/^    model = torch.load(save_name)$/;"	kind:variable	line:240
+model	../train_full_set.py	/^model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 50)$/;"	kind:variable	line:269
+model	../training.py	/^    model = arch_d(True)$/;"	kind:variable	line:244
+model	../training.py	/^    model = model.cuda()$/;"	kind:variable	line:253
+model	../training.py	/^    model = torch.load(save_name)$/;"	kind:variable	line:240
+model	../training.py	/^model = train_model(model, L1, L2, optimizer_conv, exp_lr_scheduler, 20)$/;"	kind:variable	line:271
 my_set	../my_set.py	/^class my_set(data.Dataset):$/;"	kind:class	line:70
 my_set.py	../my_set.py	1;"	kind:file	line:1
-name	../training.py	/^    name = str_l[0]$/;"	kind:variable	line:71
-norm_mean	../training.py	/^norm_mean = np.array([0.485, 0.456, 0.406])$/;"	kind:variable	line:34
-norm_std	../training.py	/^norm_std = np.array([0.229, 0.224, 0.225])$/;"	kind:variable	line:35
+name	../train_full_set.py	/^    name = str_l[0]$/;"	kind:variable	line:88
+name	../training.py	/^    name = str_l[0]$/;"	kind:variable	line:88
+norm_mean	../train_full_set.py	/^norm_mean = np.array([0.485, 0.456, 0.406])$/;"	kind:variable	line:50
+norm_mean	../training.py	/^norm_mean = np.array([0.485, 0.456, 0.406])$/;"	kind:variable	line:50
+norm_std	../train_full_set.py	/^norm_std = np.array([0.229, 0.224, 0.225])$/;"	kind:variable	line:51
+norm_std	../training.py	/^norm_std = np.array([0.229, 0.224, 0.225])$/;"	kind:variable	line:51
 normalize	../test.py	/^normalize = transforms.Normalize($/;"	kind:variable	line:12
-optimizer_conv	../training.py	/^optimizer_conv = optim.SGD(model.share.parameters()+ model.cate.parameters()+ model.ingr.parameters(),$/;"	kind:variable	line:208
-out	../training.py	/^    out = torch.FloatTensor(int_l).view(1, -1)$/;"	kind:variable	line:74
+optim_params	../train_full_set.py	/^optim_params = model.parameters()$/;"	kind:variable	line:259
+optim_params	../training.py	/^optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + list(model.ingr.parameters())$/;"	kind:variable	line:262
+optimizer_conv	../train_full_set.py	/^optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)$/;"	kind:variable	line:263
+optimizer_conv	../training.py	/^optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)$/;"	kind:variable	line:265
+out	../train_full_set.py	/^    out = torch.FloatTensor(int_l)$/;"	kind:variable	line:91
+out	../training.py	/^    out = torch.FloatTensor(int_l)$/;"	kind:variable	line:91
 pil_loader	../my_set.py	/^def pil_loader(path):$/;"	kind:function	line:46
 preprocess	../test.py	/^preprocess = transforms.Compose([$/;"	kind:variable	line:16
 rand_sample.py	../rand_sample.py	1;"	kind:file	line:1
@@ -76,12 +109,17 @@ response	../test.py	/^response = requests.get(IMG_URL)$/;"	kind:variable	line:23
 samp	../rand_sample.py	/^    samp = random.permutation(N)$/;"	kind:variable	line:51
 samp_train	../rand_sample.py	/^    samp_train = samp[0:train_N]$/;"	kind:variable	line:52
 samp_val	../rand_sample.py	/^    samp_val = samp[train_N:total_N]$/;"	kind:variable	line:53
-sets_name	../training.py	/^sets_name = ['train', 'val']$/;"	kind:variable	line:59
+save_name	../train_full_set.py	/^save_name = '.\/arch_d.pth'$/;"	kind:variable	line:78
+save_name	../training.py	/^save_name = '.\/arch_d.pth'$/;"	kind:variable	line:78
+sets_name	../train_full_set.py	/^sets_name = ['train', 'val']$/;"	kind:variable	line:75
+sets_name	../training.py	/^sets_name = ['train', 'val']$/;"	kind:variable	line:75
 src_PATH	../rand_sample.py	/^src_PATH = '..\/vireo172\/ready_chinese_food'$/;"	kind:variable	line:5
 src_PATH	../rearrange_vireo172.py	/^src_PATH = '..\/vireo172\/ready_chinese_food'$/;"	kind:variable	line:4
 std	../test.py	/^   std=[0.229, 0.224, 0.225]$/;"	kind:variable	line:14
-str_l	../training.py	/^    str_l = ll.strip().split()$/;"	kind:variable	line:70
-str_l	../training.py	/^    str_l = str_l[1:-1]$/;"	kind:variable	line:72
+str_l	../train_full_set.py	/^    str_l = ll.strip().split()$/;"	kind:variable	line:87
+str_l	../train_full_set.py	/^    str_l = str_l[1:]$/;"	kind:variable	line:89
+str_l	../training.py	/^    str_l = ll.strip().split()$/;"	kind:variable	line:87
+str_l	../training.py	/^    str_l = str_l[1:]$/;"	kind:variable	line:89
 temp	../rand_sample.py	/^    temp = xx.strip('\/').split('\/')$/;"	kind:variable	line:21
 temp	../rand_sample.py	/^    temp = xx.strip('\/').split('\/')$/;"	kind:variable	line:28
 temp	../rand_sample.py	/^    temp = xx.strip('\/').split('\/')$/;"	kind:variable	line:35
@@ -90,16 +128,20 @@ test_NAME	../rand_sample.py	/^test_NAME = '..\/vireo172\/SplitAndIngreLabel\/TE.
 test_NAME	../rearrange_vireo172.py	/^test_NAME = '..\/vireo172\/SplitAndIngreLabel\/TE.txt'$/;"	kind:variable	line:9
 total_N	../rand_sample.py	/^total_N = train_N + val_N$/;"	kind:variable	line:14
 total_list	../rand_sample.py	/^total_list = [[] for x in range(172)]$/;"	kind:variable	line:16
-train_N	../rand_sample.py	/^train_N = 32$/;"	kind:variable	line:12
+train_N	../rand_sample.py	/^train_N = 135$/;"	kind:variable	line:12
 train_NAME	../rand_sample.py	/^train_NAME = '..\/vireo172\/SplitAndIngreLabel\/TR.txt'$/;"	kind:variable	line:8
 train_NAME	../rearrange_vireo172.py	/^train_NAME = '..\/vireo172\/SplitAndIngreLabel\/TR.txt'$/;"	kind:variable	line:7
-train_model	../training.py	/^def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):$/;"	kind:function	line:92
+train_full_set.py	../train_full_set.py	1;"	kind:file	line:1
+train_model	../train_full_set.py	/^def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):$/;"	kind:function	line:109
+train_model	../training.py	/^def train_model(model, criterion1, criterion2, optimizer, scheduler, num_epochs=25):$/;"	kind:function	line:109
 train_model	../util.py	/^def train_model(model, criterion, optimizer, scheduler, num_epochs=25):$/;"	kind:function	line:13
 training.py	../training.py	1;"	kind:file	line:1
-use_gpu	../training.py	/^use_gpu = torch.cuda.is_available()$/;"	kind:variable	line:62
+use_gpu	../train_full_set.py	/^use_gpu = torch.cuda.is_available()$/;"	kind:variable	line:79
+use_gpu	../training.py	/^use_gpu = torch.cuda.is_available()$/;"	kind:variable	line:79
 util.py	../util.py	1;"	kind:file	line:1
-val_N	../rand_sample.py	/^val_N = 8$/;"	kind:variable	line:13
+val_N	../rand_sample.py	/^val_N = 56$/;"	kind:variable	line:13
 val_NAME	../rand_sample.py	/^val_NAME = '..\/vireo172\/SplitAndIngreLabel\/VAL.txt'$/;"	kind:variable	line:9
 val_NAME	../rearrange_vireo172.py	/^val_NAME = '..\/vireo172\/SplitAndIngreLabel\/VAL.txt'$/;"	kind:variable	line:8
 vgg16	../test.py	/^vgg16 = models.vgg16_bn(pretrained = True)$/;"	kind:variable	line:32
-visualize_model	../training.py	/^def visualize_model(model, num_images=6):$/;"	kind:function	line:165
+visualize_model	../train_full_set.py	/^def visualize_model(model, num_images=6):$/;"	kind:function	line:212
+visualize_model	../training.py	/^def visualize_model(model, num_images=6):$/;"	kind:function	line:212
