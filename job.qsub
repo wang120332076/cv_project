@@ -19,8 +19,10 @@ cd $PBS_O_WORKDIR
 
 # Execute command
 
-#python3 train_full_set.py
-python3 training.py
+python3 run.py vgg16 0 10
+# python3 run.py resnet 0 10
+
+# python3 run.py vgg16 1 50
 
 exit;
 

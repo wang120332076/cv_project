@@ -21,12 +21,7 @@ plt.ion()
 # Function for calculate micro f1 and macro f1
 def ingredient_accuracy(predict, truth):
     # input should be 4*353 tensors.
-    predict = predict>0.5
-    # _, ind = torch.topk(predict, 3)        # grab 3 ingr with max score as prediction
-    # predict = predict * 0
-    # for x in range(predict.size()[0]):
-    #     for y in ind[x,:]:
-    #         predict[x, y] = 1
+    predict = predict > 0.5
     predict = predict.float()
     TP = torch.sum(predict * truth)
     TN = torch.sum((1 - predict) * (1 - truth))

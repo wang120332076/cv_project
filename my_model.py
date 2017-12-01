@@ -9,9 +9,9 @@ from torchvision import models, transforms, datasets
 import numpy as np
 
 # create CNN model Arch-D according to the paper
-class arch_d(torch.nn.Module):
+class arch_d_vgg16(torch.nn.Module):
     def __init__(self, preTrained=False):
-        super(arch_d, self).__init__()
+        super(arch_d_vgg16, self).__init__()
 
         # use the convolutional layers from a pre-trained model
         self.conv = models.vgg16(preTrained).features
@@ -46,13 +46,13 @@ class arch_d(torch.nn.Module):
 
 # recreate Arch-D based on ResNet-50
 class arch_d_res50(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, preTrained=False):
         super(arch_d_res50, self).__init__()
 
         # use the convolutional layers from a pre-trained model
-        self.conv = models.resnet50(True)
+        self.conv = models.resnet50(preTrained)
         # define shared FC layer
-        self.conv.fc = nn.Linear(2048,2048)
+        self.conv.fc = nn.Linear(2048, 2048)
         self.share = nn.Sequential()
         self.share.add_module("relu_share", nn.ReLU(True))
         self.share.add_module("dropout_share", nn.Dropout())

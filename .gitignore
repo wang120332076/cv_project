@@ -101,7 +101,7 @@ ENV/
 .mypy_cache/
 
 # vscode workspace config
-.vscode/tags
+.vscode/
 
 # pycharm workspace
 .idea/*
@@ -109,3 +109,4 @@ ENV/
 *.pth.old
 *.out
 job.qsub.*
+run_stat*
