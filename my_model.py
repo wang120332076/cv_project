@@ -22,6 +22,7 @@ class plain_vgg16(torch.nn.Module):
         self.cate.add_module("relu_2", nn.ReLU(True))
         self.cate.add_module("dropout_2", nn.Dropout())
         self.cate.add_module("fc_3", nn.Linear(4096, 172))   # 4096 -> 172
+        self.cate.add_module("softmax_cate", nn.LogSoftmax())
 
     def forward(self, x):
         x = self.conv.forward(x)

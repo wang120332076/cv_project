@@ -187,7 +187,7 @@ def train_model_cate(model, dataloaders, dataset_sizes, use_gpu, stat_filename, 
             # Iterate over data.
             for data in dataloaders[phase]:
                 # get the inputs
-                inputs, cate_l, ingr_l = data
+                inputs, cate_l, _ = data
 
                 # wrap them in Variable
                 if use_gpu:
