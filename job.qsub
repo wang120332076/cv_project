@@ -20,11 +20,11 @@ cd $PBS_O_WORKDIR
 # Execute command
 
 # Train only new layers with smaller set
-python3 run.py vgg16 0 10
+# python3 run.py vgg16 0 10
 # python3 run.py resnet 0 10
 
 # Train all layers with whole set
-# python3 run.py vgg16 1 200
+python3 run.py vgg16 1 200
 
 exit;
 

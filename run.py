@@ -102,17 +102,13 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     # ----- CNN related ----- #
     # instantiate the modified CNN model
     if model_name == 'vgg16':
-        model = my_model.arch_d_vgg16(not train_all)
+        model = my_model.arch_d_vgg16(True)
         optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
                        list(model.ingr.parameters())
     elif model_name == 'resnet50':
-        model = my_model.arch_d_res50(not train_all)
+        model = my_model.arch_d_res50(True)
         optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
                        list(model.ingr.parameters()) + list(model.conv.fc.parameters())
-
-    # set to-be-tuned parameters
-    if train_all:
-        optim_params = list(model.parameters())
 
     # freeze all parameters
     for param in model.parameters():
