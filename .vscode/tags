@@ -15,10 +15,12 @@ __init__	../my_model.py	/^    def __init__(self, preTrained=False):$/;"	kind:mem
 __init__	../my_model.py	/^    def __init__(self, preTrained=False):$/;"	kind:member	line:49
 __init__	../my_set.py	/^    def __init__(self, root, ingr_dict, transform=None, target_transform=None,$/;"	kind:member	line:71
 __len__	../my_set.py	/^    def __len__(self):$/;"	kind:member	line:111
+acc	../plot.py	/^	acc = re.search(r'(?<=[\\)][\\:][\\s])(\\d|\\.)+',lines[ii*7+5]).group()$/;"	kind:variable	line:14
+acc	../plot.py	/^	acc = re.search(r'(?<=[\\)][\\:][\\s])(\\d|\\.)+',lines[ii*7+7]).group()$/;"	kind:variable	line:17
 accimage_loader	../my_set.py	/^def accimage_loader(path):$/;"	kind:function	line:53
 arch_d_res50	../my_model.py	/^class arch_d_res50(torch.nn.Module):$/;"	kind:class	line:48
 arch_d_vgg16	../my_model.py	/^class arch_d_vgg16(torch.nn.Module):$/;"	kind:class	line:12
-args	../run.py	/^    args = sys.argv$/;"	kind:variable	line:148
+args	../run.py	/^    args = sys.argv$/;"	kind:variable	line:157
 cate_labels	../training.py	/^    cate_labels = f.read().splitlines()$/;"	kind:variable	line:100
 class_names	../training.py	/^class_names = image_datasets['train'].classes$/;"	kind:variable	line:97
 data_dirname	../training.py	/^data_dirname = '..\/vireo172\/vireo172_lite'$/;"	kind:variable	line:69
@@ -28,6 +30,7 @@ dataset_sizes	../training.py	/^dataset_sizes = {x: len(image_datasets[x]) for x 
 default_loader	../my_set.py	/^def default_loader(path):$/;"	kind:function	line:62
 dst_PATH	../rand_sample.py	/^dst_PATH = '..\/vireo172\/vireo172_lite'$/;"	kind:variable	line:6
 dst_PATH	../rearrange_vireo172.py	/^dst_PATH = '..\/vireo172\/vireo172_sets'$/;"	kind:variable	line:5
+epoch	../plot.py	/^epoch = int(re.search(r'\\d+',lines[2]).group())$/;"	kind:variable	line:7
 exp_lr_scheduler	../training.py	/^exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)$/;"	kind:variable	line:266
 fc_out	../test.py	/^fc_out = vgg16(img_variable)$/;"	kind:variable	line:34
 find_classes	../my_set.py	/^def find_classes(dir):$/;"	kind:function	line:21
@@ -50,9 +53,12 @@ ingredient_accuracy	../my_util.py	/^def ingredient_accuracy(predict, truth):$/;"
 ingredient_accuracy	../training.py	/^def ingredient_accuracy(predict, truth):$/;"	kind:function	line:22
 int_l	../training.py	/^    int_l = [0 if int(x)==(-1) else 1 for x in str_l]$/;"	kind:variable	line:85
 is_image_file	../my_set.py	/^def is_image_file(filename):$/;"	kind:function	line:10
+l	../plot.py	/^	l = re.search(r'(?<=[s][\\:][\\s])(\\d|\\.)+',lines[ii*7+5]).group()$/;"	kind:variable	line:30
+l	../plot.py	/^	l = re.search(r'(?<=[s][\\:][\\s])(\\d|\\.)+',lines[ii*7+7]).group()$/;"	kind:variable	line:32
 label_filename	../training.py	/^label_filename = '..\/vireo172\/SplitAndIngreLabel\/FoodList.txt'$/;"	kind:variable	line:71
 labels	../test.py	/^labels = {int(key):value for (key, value)$/;"	kind:variable	line:25
 len_list	../rand_sample.py	/^len_list = [len(x) for x in total_list]$/;"	kind:variable	line:38
+lines	../plot.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:5
 lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:19
 lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:26
 lines	../rand_sample.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:33
@@ -60,9 +66,13 @@ lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:vari
 lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:17
 lines	../rearrange_vireo172.py	/^    lines = f.read().splitlines()$/;"	kind:variable	line:22
 lines	../training.py	/^    lines = f.readlines()$/;"	kind:variable	line:78
+macro	../plot.py	/^	macro = re.search(r'(?<=[M][a][c][r][o][\\-][F][1][\\:][\\s])(\\d|\\.)+',lines[ii*7+6]).group()$/;"	kind:variable	line:22
+macro	../plot.py	/^	macro = re.search(r'(?<=[M][a][c][r][o][\\-][F][1][\\:][\\s])(\\d|\\.)+',lines[ii*7+8]).group()$/;"	kind:variable	line:27
 main	../run.py	/^def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):$/;"	kind:function	line:18
 make_dataset	../my_set.py	/^def make_dataset(dir, class_to_idx):$/;"	kind:function	line:28
 mean	../test.py	/^   mean=[0.485, 0.456, 0.406],$/;"	kind:variable	line:13
+micro	../plot.py	/^	micro = re.search(r'(?<=[M][i][c][r][o][\\-][F][1][\\:][\\s])(\\d|\\.)+',lines[ii*7+6]).group()$/;"	kind:variable	line:20
+micro	../plot.py	/^	micro = re.search(r'(?<=[M][i][c][r][o][\\-][F][1][\\:][\\s])(\\d|\\.)+',lines[ii*7+8]).group()$/;"	kind:variable	line:25
 model	../training.py	/^    model = arch_d(True)$/;"	kind:variable	line:242
 model	../training.py	/^    model = model.cuda()$/;"	kind:variable	line:251
 model	../training.py	/^    model = torch.load(save_name)$/;"	kind:variable	line:238
@@ -79,6 +89,7 @@ optim_params	../training.py	/^optim_params = list(model.share.parameters()) + li
 optimizer_conv	../training.py	/^optimizer_conv = optim.SGD(optim_params, lr=0.001, momentum=0.9)$/;"	kind:variable	line:263
 out	../training.py	/^    out = torch.FloatTensor(int_l)$/;"	kind:variable	line:86
 pil_loader	../my_set.py	/^def pil_loader(path):$/;"	kind:function	line:46
+plot.py	../plot.py	1;"	kind:file	line:1
 preprocess	../test.py	/^preprocess = transforms.Compose([$/;"	kind:variable	line:16
 rand_sample.py	../rand_sample.py	1;"	kind:file	line:1
 rearrange_vireo172.py	../rearrange_vireo172.py	1;"	kind:file	line:1
@@ -113,5 +124,6 @@ val_N	../rand_sample.py	/^val_N = 4$/;"	kind:variable	line:13
 val_NAME	../rand_sample.py	/^val_NAME = '..\/vireo172\/SplitAndIngreLabel\/VAL.txt'$/;"	kind:variable	line:9
 val_NAME	../rearrange_vireo172.py	/^val_NAME = '..\/vireo172\/SplitAndIngreLabel\/VAL.txt'$/;"	kind:variable	line:8
 vgg16	../test.py	/^vgg16 = models.vgg16_bn(pretrained = True)$/;"	kind:variable	line:32
-visualize_model	../my_util.py	/^def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):$/;"	kind:function	line:159
+visualize_model	../my_util.py	/^def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):$/;"	kind:function	line:158
 visualize_model	../training.py	/^def visualize_model(model, num_images=6):$/;"	kind:function	line:210
+xaxis	../plot.py	/^xaxis = range(epoch)$/;"	kind:variable	line:37

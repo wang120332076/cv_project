@@ -8,6 +8,27 @@ from torch.optim import lr_scheduler
 from torchvision import models, transforms, datasets
 import numpy as np
 
+# use plain VGG16 on categorization for performance comparison
+class plain_vgg16(torch.nn.Module):
+    def __init__(self, preTrained=False):
+        super(plain_vgg16, self).__init__()
+
+        self.conv = models.vgg16(preTrained).features
+        self.cate = nn.Sequential()
+        self.cate.add_module("fc_1", nn.Linear(25088, 4096)) # 25088 -> 4096
+        self.cate.add_module("relu_1", nn.ReLU(True))
+        self.cate.add_module("dropout_1", nn.Dropout())
+        self.cate.add_module("fc_2", nn.Linear(4096, 4096))  # 4096 -> 4096
+        self.cate.add_module("relu_2", nn.ReLU(True))
+        self.cate.add_module("dropout_2", nn.Dropout())
+        self.cate.add_module("fc_3", nn.Linear(4096, 172))   # 4096 -> 172
+
+    def forward(self, x):
+        x = self.conv.forward(x)
+        x = x.view(x.size(0), -1)
+        cate_out = self.cate(x)
+        return cate_out
+
 # create CNN model Arch-D according to the paper
 class arch_d_vgg16(torch.nn.Module):
     def __init__(self, preTrained=False):

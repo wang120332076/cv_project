@@ -105,6 +105,9 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
         model = my_model.arch_d_vgg16(True)
         optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
                        list(model.ingr.parameters())
+    elif model_name == 'plain_vgg16':
+        model = my_model.plain_vgg16(True)
+        optim_params = list(model.cate.parameters())
     elif model_name == 'resnet50':
         model = my_model.arch_d_res50(True)
         optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
@@ -136,8 +139,12 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=step_s, gamma=0.1)
 
     # start training
-    model = util.train_model(model, dataloaders, dataset_sizes, use_gpu, stat_filename, \
-                             L1, L2, optimizer_conv, exp_lr_scheduler, epoch_num)
+    if model_name == 'plain_vgg16':
+        model = util.train_model_cate(model, dataloaders, dataset_sizes, use_gpu, stat_filename, \
+                                      L1, optimizer_conv, exp_lr_scheduler, epoch_num)
+    else:
+        model = util.train_model(model, dataloaders, dataset_sizes, use_gpu, stat_filename, \
+                                 L1, L2, optimizer_conv, exp_lr_scheduler, epoch_num)
 
     # show results
     # visualize_model(model, dataloaders, use_gpu)
@@ -161,7 +168,7 @@ if __name__ == '__main__':
         print('Error: wrong input parameters')
         quit(1)
     # check model name
-    if(args[1] not in ['vgg16']):
+    if(args[1] not in ['vgg16', 'plain_vgg16']):
         print('Error: wrong model name')
         quit(2)
     # call main function

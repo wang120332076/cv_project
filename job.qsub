@@ -23,8 +23,12 @@ cd $PBS_O_WORKDIR
 # python3 run.py vgg16 0 10
 # python3 run.py resnet 0 10
 
-# Train all layers with whole set
-python3 run.py vgg16 1 200
+# Train new layers with whole set
+# python3 run.py vgg16 1 200
+
+# Train plain VGG16
+python3 run.py plain_vgg16 0 5
+# python3 run.py plain_vgg16 1 100
 
 exit;
 
