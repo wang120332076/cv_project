@@ -8,14 +8,14 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.optim import lr_scheduler
-from torchvision import models, transforms, datasets
+from torchvision import transforms
 import numpy as np
 import matplotlib.pyplot as plt
 import my_model
 import my_util as util
 from my_set import my_set
 
-def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
+def main(model_name, train_all, epoch_num=20, save_name=None):
     print('Using model - \t\t\'%s\'' % model_name)
     print('Train all layers - \t\'%s\'' % train_all)
     print('Epoch number - \t\t\'%d\'' % epoch_num)
@@ -87,7 +87,7 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     else:
         batch_s = 4
     image_datasets = {x: my_set(os.path.join(data_dirname, x), ingr_label,
-                                            data_transforms[x])
+                                             data_transforms[x])
                     for x in sets_name}
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_s,
                                                 shuffle=True, num_workers=4)
@@ -108,11 +108,19 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     elif model_name == 'plain_vgg16':
         model = my_model.plain_vgg16(True)
         optim_params = list(model.cate.parameters())
-    elif model_name == 'resnet50':
-        model = my_model.arch_d_res50(True)
+    elif model_name == 'plain_resnet152':
+        model = my_model.plain_resnet152(True)
         optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
-                       list(model.ingr.parameters()) + list(model.conv.fc.parameters())
-
+                       list(model.conv.fc.parameters())
+    elif model_name == 'plain_densenet161':
+        model = my_model.plain_densenet161(True)
+        optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
+                       list(model.conv.classifier.parameters())
+    elif model_name == 'plain_inception':
+        model = my_model.plain_inception(True)
+        optim_params = list(model.share.parameters()) + list(model.cate.parameters()) + \
+                       list(model.conv.fc.parameters())
+                       
     # freeze all parameters
     for param in model.parameters():
         param.requires_grad = False
@@ -139,7 +147,8 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=step_s, gamma=0.1)
 
     # start training
-    if model_name == 'plain_vgg16':
+    is_plain = (model_name.split('_')[0] == 'plain')
+    if is_plain:
         model = util.train_model_cate(model, dataloaders, dataset_sizes, use_gpu, stat_filename, \
                                       L1, optimizer_conv, exp_lr_scheduler, epoch_num)
     else:
@@ -150,6 +159,11 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
     # visualize_model(model, dataloaders, use_gpu)
 
     # save trained model
+    if save_name is None:
+        str_a = model_name + '_'
+        str_b = ('1' if train_all else '0') + '_'
+        str_c = str(epoch_num)
+        save_name = str_a + str_b + str_c
     save_name = './' + save_name
     if os.path.exists(save_name):
         print('Backing up existing saved model')
@@ -163,12 +177,15 @@ def main(model_name, train_all, epoch_num=20, save_name='trained_model.pth'):
 if __name__ == '__main__':
     args = sys.argv
     # print(args)
+
     # check input param#
     if(len(args) not in [4, 5]):
         print('Error: wrong input parameters')
         quit(1)
     # check model name
-    if(args[1] not in ['vgg16', 'plain_vgg16']):
+    models_list = ['vgg16', 'plain_vgg16', 'plain_resnet152', \
+                   'plain_inception', 'plain_densenet161']
+    if(args[1] not in models_list):
         print('Error: wrong model name')
         quit(2)
     # call main function
@@ -178,4 +195,3 @@ if __name__ == '__main__':
         main(args[1], bool(int(args[2])), int(args[3]), args[4])
 
     quit(0)
-
