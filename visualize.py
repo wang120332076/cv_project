@@ -3,7 +3,6 @@ import numpy as np
 import sys
 import os
 import torch
-import torch.nn as nn
 from torchvision import transforms
 from my_set import my_set
 import matplotlib.pyplot as plt
@@ -65,7 +64,6 @@ def main(model_file, test_all=False):
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
                                                 shuffle=True, num_workers=4)
                 for x in sets_name}
-    dataset_sizes = {x: len(image_datasets[x]) for x in sets_name}
     class_names = image_datasets['train'].classes
     # create label list
     with open(label_filename, 'r', encoding="utf-8") as f:
@@ -87,5 +85,6 @@ if __name__ == '__main__':
 
     main(args[1])
     plt.ioff()
+    plt.show()
 
-    # quit(0)
+    quit(0)

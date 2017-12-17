@@ -110,3 +110,4 @@ ENV/
 *.out
 job.qsub.*
 run_stat*
+*.png

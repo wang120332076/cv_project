@@ -27,7 +27,7 @@ def imshow(inp, title=None):
     std = np.array([0.229, 0.224, 0.225])
     inp = std * inp + mean
     inp = np.clip(inp, 0, 1)
-    plt.imshow(inp)
+    plt.imshow(inp, aspect='auto')
     if title is not None:
         plt.title(title)
     plt.pause(0.001)
@@ -258,10 +258,16 @@ def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):
             images_so_far += 1
             ax = plt.subplot(num_images//2, 2, images_so_far)
             ax.axis('off')
-            ax.set_title('predicted: {}'.format(class_names[preds[j]]))
-            # print(class_names[preds[j]])
-            # print(cate_l[preds[j]])
+            ax.set_title('R: {}\nP: {}'.format(class_names[cate_l[j]], class_names[preds[j]]))
             imshow(inputs.cpu().data[j])
 
             if images_so_far == num_images:
-                return
+                break
+
+        if images_so_far == num_images:
+            break
+
+    # save a picture of the figure
+    plt.savefig('test.png', bbox_inches='tight')
+
+
