@@ -53,7 +53,7 @@ Chinese food and it's ingredients are hard to be recognized for several reasons.
 <br><br>
 <!-- Main Illustrative Figure --> 
 <div style="text-align: center;">
-<img style="height: 200px;" alt="" src="cat.jpg">
+<img style="height: 200px;" alt="" src="cat.jpg"/>
 Figure 1: Different dishes of Chinese food all with pork.
 </div>
 
@@ -66,7 +66,7 @@ Figure 1: Different dishes of Chinese food all with pork.
 Chen J. and her group [1] constructed a Chinese food database: Vireo 172, consisting of 172 categories of food and 110,000 images. It also contains 353 different ingredients labels for each image. All the images in the dataset were crawled from Baidu
 and Google image search. The names of food categories, were issued as keywords in Chinese to search engines, and 1,300 images are crawled per food category. Figure 2 shows a part of food categories and the corresponding image.
 <div style="text-align: center;">
-<img style="height: 330px;" alt="" src="172.jpg" align = "center">
+<img style="height: 330px;" alt="" src="172.jpg" align = "center"/>
 <br>
 Figure 2: 75 kinds of food categories and the corresponding image.
 </div>
@@ -76,8 +76,8 @@ Two CNN models, VGG16[3] and Resnet152[4], are implemented and compared. It's a 
 For VGG16, the two tasks share the first fc layers and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, so the two output is connected to the convolution layers (and avg pool) directly.
 
 <div style="text-align: center;">
-<img style="height: 200px;" alt="" src="vgg16.jpg"  align = "center">
-<img style="height: 200px;" alt="" src='resnet152.jpg' align = "center">
+<img style="height: 200px;" alt="" src="vgg16.jpg"  align = "center"/>
+<img style="height: 200px;" alt="" src='resnet152.jpg' align = "center"/>
 <br>Figure 3: The modified architecture of VGG16 and Resnet152.
 </div>
 
