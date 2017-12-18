@@ -1,4 +1,4 @@
-from my_util import visualize_model
+import my_util as my_u
 import numpy as np
 import sys
 import os
@@ -7,7 +7,7 @@ from torchvision import transforms
 from my_set import my_set
 import matplotlib.pyplot as plt
 
-def main(model_file, test_all=False):
+def main(model_file, mode, test_all=False):
     # ----- Dataset related ----- #
     test_all = False
     # initialize environment vars
@@ -17,6 +17,7 @@ def main(model_file, test_all=False):
         data_dirname = '../vireo172/vireo172_lite'
     sets_name = ['train', 'val']
     label_filename = '../vireo172/SplitAndIngreLabel/FoodList.txt'
+    ingr_label_filename = '../vireo172/SplitAndIngreLabel/IngredientList.txt'
     ingr_filename = '../vireo172/SplitAndIngreLabel/IngreLabel.txt'
     use_gpu = torch.cuda.is_available()
 
@@ -65,25 +66,31 @@ def main(model_file, test_all=False):
                                                 shuffle=True, num_workers=4)
                 for x in sets_name}
     class_names = image_datasets['train'].classes
-    # create label list
+    # create category label list
     with open(label_filename, 'r', encoding="utf-8") as f:
         cate_labels = f.read().splitlines()
     class_names = [cate_labels[(int(x)-1)] for x in class_names]
+    # create ingredient label list
+    with open(ingr_label_filename, 'r', encoding="utf-8") as f:
+        ingr_labels = f.read().splitlines()
 
     model = torch.load(model_file)
-
-    visualize_model(model, dataloaders, class_names, use_gpu, 6)
+    if mode == 'cate':
+        my_u.visualize_cate(model, dataloaders, class_names, use_gpu, 6)
+    else:
+        my_u.visualize_ingr(model, dataloaders, ingr_labels, use_gpu)
 
 if __name__ == '__main__':
     plt.ion()
 
     args = sys.argv
     
-    if len(args) != 2:
-        print('Error: wrong input parameters')
+    if (len(args) != 3) or (args[1] not in ['cate', 'ingr']):
+        print('Error: wrong usage!')
+        print('Usage: python3 visualize.py cate/ingr vgg16.pth')
         quit(1)
 
-    main(args[1])
+    main(args[2], args[1])
     plt.ioff()
     plt.show()
 

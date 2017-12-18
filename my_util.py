@@ -240,7 +240,7 @@ def train_model_cate(model, dataloaders, dataset_sizes, use_gpu, stat_filename, 
     model.load_state_dict(best_model_wts)
     return model
 
-def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):
+def visualize_cate(model, dataloaders, class_names, use_gpu, num_images=6):
     images_so_far = 0
     fig = plt.figure()
 
@@ -251,7 +251,7 @@ def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):
         else:
             inputs = Variable(inputs)
 
-        cate_pred, ingr_pred = model(inputs)
+        cate_pred, _ = model(inputs)
         _, preds = torch.max(cate_pred.data, 1)
 
         for j in range(inputs.size()[0]):
@@ -267,7 +267,41 @@ def visualize_model(model, dataloaders, class_names, use_gpu, num_images=6):
         if images_so_far == num_images:
             break
 
+    # save the figure
+    # plt.savefig('cate_test.png', bbox_inches='tight')
+
+def visualize_ingr(model, dataloaders, class_names, use_gpu):
+    fig = plt.figure()
+    inputs, cate_l, ingr_l = [], [], []
+
+    # draw a random image from validation dataset
+    for i, data in enumerate(dataloaders['val']):
+        inputs, cate_l, ingr_l = data
+        break
+
+    if use_gpu:
+        inputs = Variable(inputs.cuda())
+    else:
+        inputs = Variable(inputs)
+
+    _, ingr_pred = model(inputs)
+    ingr_pred = ingr_pred.data[0]
+    ingr_pred_idx = torch.nonzero(ingr_pred > 0.5)
+    ingr_pred_idx = ingr_pred_idx.squeeze().tolist()
+
+    ingr_real_idx = torch.nonzero(ingr_l[0]).squeeze().tolist()
+
+    pred_str, real_str = '', ''
+
+    for x in ingr_pred_idx:
+        pred_str += (class_names[x-1] + '\n')
+
+    for x in ingr_real_idx:
+        real_str += (class_names[x-1] + '\n')
+
+    title_str = 'R: {}\nP: {}'.format(real_str, pred_str)
+    imshow(inputs.cpu().data[0], title_str)
+    plt.axis('off')
+
     # save a picture of the figure
-    plt.savefig('test.png', bbox_inches='tight')
-
-
+    # plt.savefig('ingr_test.png', bbox_inches='tight')
