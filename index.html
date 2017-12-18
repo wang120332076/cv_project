@@ -66,14 +66,14 @@ Figure 1: Different dishes of Chinese food all with pork.
 Chen J. and her group [1] constructed a Chinese food database: Vireo 172, consisting of 172 categories of food and 110,000 images. It also contains 353 different ingredients labels for each image. All the images in the dataset were crawled from Baidu
 and Google image search. The names of food categories, were issued as keywords in Chinese to search engines, and 1,300 images are crawled per food category. Figure 2 shows a part of food categories and the corresponding image.
 <div style="text-align: center;">
-<img style="height: 100px;" alt="" src="172_1.jpg" align = "center"/>
+<img style="height: 370px;" alt="" src="172_1.jpg" align = "center"/>
 <br>
 Figure 2: 75 kinds of food categories and the corresponding image.
 </div>
 
 <h4>CNN Model Architecture Design</h4>
 Two CNN models, VGG16[3] and Resnet152[4], are implemented and compared. It's a multiple output task because of the combination of food categorization and ingredients recognition. As a result, the original architecture of VGG16 and Resnet152 need to be modified to apply this case. In terms of design, the major modification is made on the fully connected layers.
-For VGG16, the two tasks share the first fc layers and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, so the two output is connected to the convolution layers (and avg pool) directly.
+For VGG16, the two tasks share the first fc layers and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, so the two output is connected to the convolution layers (and avg pool) directly[2].
 
 <div style="text-align: center;">
 <img style="height: 200px;" alt="" src="vgg16_1.jpg"  align = "center"/>
@@ -81,31 +81,20 @@ For VGG16, the two tasks share the first fc layers and own two privately layers.
 <br>Figure 3: The modified architecture of VGG16 and Resnet152.
 </div>
 
-<h4></h4>
+<h4>Loss Function</h4>
+Relatively, the loss function need to be modified to apply multiple tasks. <br>
+For food categorization, the  multinomial logistic loss function is used and defined as <img style="height: 20px;" alt="" src="l1.jpg"  align = "center"/>, while <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> is the predicted score of an image n for its ground-truth food label y. <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> is obtained from softmax activation function, so 0 < <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> < 1. As a result, L1's value is less than 0. The bigger L1's absolute value is, the less probability a image is corresponding to this label. Log function is used for a quicker convergence.<br>
+For ingredients recognition, the cross-entropy loss function is used and defined as <img style="height: 47px;" alt="" src="l2.jpg"  align = "center"/>, while <img style="height: 20px;" alt="" src="l2_1.jpg"  align = "center"/> is a vector contains 0 and 1 in 353 dimensions, as the ground-truth ingredients for an image n. <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> denotes the probability of having ingredient category c for an image n, obtained through sigmoid activation function. So <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> is also between 0 and 1. Similar to L1, L2 is always below 0, and the higher its absolute value is, the closer it's to the ground-truth.<br>
+The overall loss function is defined as <img style="height: 49px;" alt="" src="ls.jpg"  align = "center"/>, combing L1 and L2. <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> is a parameter used to adjust the importance of food categorization and ingredients recognition. Higher <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> represents ingredients recognition takes a more importance place in the over loss function. Smaller over function represents better result. The best performance is gotten when <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> = 0.2 in the practice.
+
 
 <br><br>
 <!-- Results -->
-<h3>Experiments and results</h3>
-Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
+<h3>Results</h3>
 
-<br><br>
 
-<!-- Main Results Figure --> 
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="results.png">
-</div>
-<br><br>
 
-<!-- Results -->
-<h3>Qualitative results</h3>
-Show several visual examples of inputs/outputs of your system (success cases and failures) that help us better understand your approach.
-<br><br>
 
-<!-- Main Results Figure --> 
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="qual_results.png">
-</div>
-<br><br>
 
 <h3>References</h3>
 [1] Chen, J., & Ngo, C. W. (2016, October). Deep-based ingredient recognition for cooking recipe retrieval. In Proceedings of the 2016 ACM <i> on Multimedia Conference </i> (pp. 32-41). ACM.
