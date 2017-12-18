@@ -44,7 +44,7 @@ for Chinese Food</h1>
 
 <!-- Goal -->
 <h3>Abstract</h3>
-
+这里你们看着写点什么
 One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the approach you took. One or two sentences on the main result you obtained.
 <br><br>
 <!-- figure -->
@@ -70,7 +70,7 @@ and Google image search. The names of food categories, were issued as keywords i
 <br>
 Figure 2: 75 kinds of food categories and the corresponding image.
 </div>
-
+<br>
 <h4>CNN Model Architecture Design</h4>
 Two CNN models, VGG16[3] and Resnet152[4], are implemented and compared. It's a multiple output task because of the combination of food categorization and ingredients recognition. As a result, the original architecture of VGG16 and Resnet152 need to be modified to apply this case. In terms of design, the major modification is made on the fully connected layers.
 For VGG16, the two tasks share the first fc layers and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, so the two output is connected to the convolution layers (and avg pool) directly[2].
@@ -91,9 +91,23 @@ The overall loss function is defined as <img style="height: 49px;" alt="" src="l
 <br><br>
 <!-- Results -->
 <h3>Results</h3>
-Interestingly,
+Interestingly, VGG16 and Resent152 offer different advantages in different aspects.
 
-
+<h4>Macro Micro F1 Value</h4>
+这里我来补充
+<h4>Convergence Speed</h4>
+写点什么说明一下
+<div style="text-align: center;">
+<img style="height: 210px;" alt="" src="cat2.jpg"/>
+<img style="height: 210px;" alt="" src="cat1.jpg"/>
+</div>
+<h4>Accuracy</h4>
+再写点说明说明
+<div style="text-align: center;">
+<img style="height: 110px;" alt="" src="table.jpg"/>
+</div>
+<h4>Exhibition</h4>
+把你的图放这里
 
 
 <h3>References</h3>
@@ -106,7 +120,7 @@ Interestingly,
 [4] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In <i>CVPR </i> (pp. 770-778).
 
 <br><br><br>
-GitHub link: <a href="https://github.com/wang120332076/cv_project">https://github.com/wang120332076/cv_project</a>
+GitHub link: <a href="https://github.com/wang120332076/cv_project">https://github.com/wang120332076/cv_project</a> 记得把权限公开
   <hr>
   <footer> 
   <p>© Chenhao Wang, Mengfan Wang, Yao Xiao, Yuxian Ye</p>
