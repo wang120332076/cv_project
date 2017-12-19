@@ -44,12 +44,13 @@ for Chinese Food</h1>
 
 <!-- Goal -->
 <h3>Abstract</h3>
-这里你们看着写点什么
-One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the approach you took. One or two sentences on the main result you obtained.
+Chinese food is difficult to be categorized, especially its ingredients. Combing food categorization and ingredients recognition is regarded as a useful method to improve the accuracy. In this project, we modified the architecture of two CNN models, VGG16 and Resnet152, to implement the multiple outputs task, and compared their performance.
+<br><br>
+Key words: Chinese food, food categorization, ingredients recognition, VGG, Resnet.
 <br><br>
 <!-- figure -->
 <h3>Introduction</h3>
-Chinese food and it's ingredients are hard to be recognized for several reasons. Firstly, some ingredients are difficult to be recognized, for example, ingredients under soup or sauce. Secondly, they are invisible in flour-made food categories such as dumpling and noodle. Thirdly, many ingredients exhibit large visual variations due to different ways of cutting and cooking. For example, Figure 1 shows six dishes of Chinese food all with pork, though they look totally different. Hence, combing food categorization and ingredients recognition is regarded as a useful method to improve the accuracy.
+Chinese food and it's ingredients are hard to be recognized for several reasons. Firstly, some ingredients are difficult to be recognized, for example, ingredients under soup or sauce. Secondly, they are invisible in flour-made food categories such as dumplings and noodles. Thirdly, many ingredients exhibit large visual variations due to different ways of cutting and cooking. For example, Figure 1 shows six dishes of Chinese food all with pork, though they look totally different. Hence, combing food categorization and ingredients recognition is regarded as a useful method to improve the accuracy.
 <br><br>
 <!-- Main Illustrative Figure --> 
 <div style="text-align: center;">
@@ -64,7 +65,7 @@ Figure 1: Different dishes of Chinese food all with pork.
 <br>
 <h4>Dataset: Vireo 172</h4>
 Chen J. and her group [1] constructed a Chinese food database: Vireo 172, consisting of 172 categories of food and 110,000 images. It also contains 353 different ingredients labels for each image. All the images in the dataset were crawled from Baidu
-and Google image search. The names of food categories, were issued as keywords in Chinese to search engines, and 1,300 images are crawled per food category. Figure 2 shows a part of food categories and the corresponding image.
+and Google image search. The names of food categories, were issued as keywords in Chinese to search engines, and 1,300 images are crawled per food category. Figure 2 shows a part of food categories and the corresponding images.
 <div style="text-align: center;">
 <img style="height: 370px;" alt="" src="172_1.jpg" align = "center"/>
 <br>
@@ -72,8 +73,8 @@ Figure 2: 75 kinds of food categories and the corresponding image.
 </div>
 <br>
 <h4>CNN Model Architecture Design</h4>
-Two CNN models, VGG16[3] and Resnet152[4], are implemented and compared. It's a multiple output task because of the combination of food categorization and ingredients recognition. As a result, the original architecture of VGG16 and Resnet152 need to be modified to apply this case. In terms of design, the major modification is made on the fully connected layers.
-For VGG16, the two tasks share the first fc layers and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, so the two output is connected to the convolution layers (and avg pool) directly[2].
+Two CNN models, VGG16[3] and Resnet152[4], are implemented and compared. It's a multiple outputs task because of the combination of food categorization and ingredients recognition. As a result, the original architecture of VGG16 and Resnet152 need to be modified to apply this case. In terms of design, the major modification is made on the fully connected layers.
+For VGG16, the two tasks share the first fc layer and own two privately layers. There are 4,096 neurons for food categorization, and 1024 neurons for ingredient[1]. For Resnet152, because there is only one fc layer, the two outputs are connected to the convolution layers (and avg pool) directly[2].
 
 <div style="text-align: center;">
 <img style="height: 200px;" alt="" src="vgg16_1.jpg"  align = "center"/>
@@ -84,8 +85,8 @@ For VGG16, the two tasks share the first fc layers and own two privately layers.
 <h4>Loss Function</h4>
 Relatively, the loss function need to be modified to apply multiple tasks. <br>
 For food categorization, the  multinomial logistic loss function is used and defined as <img style="height: 20px;" alt="" src="l1.jpg"  align = "center"/>, while <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> is the predicted score of an image n for its ground-truth food label y. <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> is obtained from softmax activation function, so 0 < <img style="height: 20px;" alt="" src="l1_1.jpg"  align = "center"/> < 1. As a result, L1's value is less than 0. The bigger L1's absolute value is, the less probability a image is corresponding to this label. Log function is used for a quicker convergence.<br>
-For ingredients recognition, the cross-entropy loss function is used and defined as <img style="height: 47px;" alt="" src="l2.jpg"  align = "center"/>, while <img style="height: 20px;" alt="" src="l2_1.jpg"  align = "center"/> is a vector contains 0 and 1 in 353 dimensions, as the ground-truth ingredients for an image n. <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> denotes the probability of having ingredient category c for an image n, obtained through sigmoid activation function. So <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> is also between 0 and 1. Similar to L1, L2 is always below 0, and the higher its absolute value is, the closer it's to the ground-truth.<br>
-The overall loss function is defined as <img style="height: 49px;" alt="" src="ls.jpg"  align = "center"/>, combing L1 and L2. <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> is a parameter used to adjust the importance of food categorization and ingredients recognition. Higher <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> represents ingredients recognition takes a more importance place in the over loss function. Smaller over function represents better result. The best performance is gotten when <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> = 0.2 in the practice.
+For ingredients recognition, the cross-entropy loss function is used and defined as <img style="height: 47px;" alt="" src="l2.jpg"  align = "center"/>, while <img style="height: 20px;" alt="" src="l2_1.jpg"  align = "center"/> is a vector contains 0 and 1 in 353 dimensions, as the ground-truth ingredients for an image n. <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> denotes the probability of having ingredient category c for an image n, obtained through sigmoid activation function. So <img style="height: 20px;" alt="" src="l2_2.jpg"  align = "center"/> is also between 0 and 1. Similar to L1, L2 is always below 0, and the lower its absolute value is, the closer it's to the ground-truth.<br>
+The overall loss function is defined as <img style="height: 49px;" alt="" src="ls.jpg"  align = "center"/>, combing L1 and L2. <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> is a parameter used to adjust the importance of food categorization and ingredients recognition. Higher <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> represents ingredients recognition takes a more importance place in the overall loss function.  The best performance is gotten when <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> = 0.2 in the practice.
 
 
 <br><br>
@@ -93,22 +94,31 @@ The overall loss function is defined as <img style="height: 49px;" alt="" src="l
 <h3>Results</h3>
 Interestingly, VGG16 and Resent152 offer different advantages in different aspects.
 
-<h4>Macro Micro F1 Value</h4>
-这里我来补充
+<h4>Evaluation Method</h4>
+For food categorization, because the ground-truth is a single label, Top-1 and Top-5 accuracy are enough to evaluate the two models. Nevertheless, for ingredients recognition, the ground-truth is a vector in 353 dimensions so that Top-1 or Top-5 accuracy are useless. Each image contains 3 ingredients in average, in which case the ground-truth is almost all zero. Even a model can't recognize any ingredients of a image, the accuracies are still quite high. Macro F1 value and micro F1 value are proposed to evaluate ingredients recognition[5]. Macro value is defined as <img style="height: 43px;" alt="" src="macro.jpg"  align = "center"/>. Macro precision and macro recall are the average of each image's precision and recall. Macro F1 value is the harmonic mean of macro precision and recall. Micro value is defined as <img style="height: 46px;" alt="" src="micro.jpg"  align = "center"/>. Micro precision is that sum of TP and FP divided by sum of TP. Micro recall is that sum of TP and FN divided by sum of TP. Micro F1 value is the harmonic mean of micro precision and recall.
 <h4>Convergence Speed</h4>
-写点什么说明一下
+VGG16 has a better performance in training time and convergence speed. Figure 4 and 5 show the the two models' performance in each epoch: loss function value, food categorization's accuracy, ingredients recognition's macro and micro F1 value, from left to right. On one hand, VGG16's results converge in ten epochs, and get the best result when the 6th epoch. On the other hand, Resnet's results converge over thirty epochs. For each epoch, Resnet152 seems need more time than VGG16. As a result, VGG16's results converge much more quickly than Resnet152.
 <div style="text-align: center;">
 <img style="height: 210px;" alt="" src="cat2.jpg"/>
+<br>Figure 4: VGG16's performance in each epoch.
 <img style="height: 210px;" alt="" src="cat1.jpg"/>
+<br>Figure 5: Resnet's performance in each epoch.
 </div>
-<h4>Accuracy</h4>
-再写点说明说明
+<h4>Performance</h4>
+Table 1 shows results of the two models. For VGG16, the results are not as good as implemented in [1] though the same architecture and loss function are used. One possible reason is some parameters (such as <img style="height: 20px;" alt="" src="ls_1.jpg"  align = "center"/> ) are not best. Resnet152 has a better performance than VGG16 in all evaluation methods. Scores are improved about 10% in average.
 <div style="text-align: center;">
-<img style="height: 110px;" alt="" src="table.jpg"/>
+<img style="height: 130px;" alt="" src="table.jpg"/>
+<br>Table 1: Performance of VGG16 and Resnet152.
 </div>
 <h4>Exhibition</h4>
-把你的图放这里
+Figure 6 shows some results of Resent152. P represents predict (the output) and R represents real (the ground-truth). For food categorization (image 1), there is a error that Yu-Shiang shredded pork is regarded as auteed squid tentacles. However it could really be auteed squid tentacles in human's eyes because they are very similar. For ingredients recognition, some ingredients are really confusing, such as shredded pig ears in image 2 and white sesame in image 3. It's scarcely possible for human to distinguish the two ingredients.
+<div style="text-align: center;">
+<img style="height: 350px;" alt="" src="ex.jpg"/>
+<br>Figure 6: Some results of food categorization and ingredients recognition.
+</div>
 
+<h3>Conclusion</h3>
+We have implemented two CNN models, VGG16 and Resnet152, for Chinese food's categorization and its ingredients recognition, and compared their performance. A dataset, Vireo 172, is used to train and test the models. Models' architectures are modified to adapt to the multiple outputs task. Loss function also combines two outputs. The models have different advantages. VGG16 converges more quickly, which is suited to get results as soon as possible. Resent152 has a better performance in all aspects, suited to get better results. However, food categorization, especially ingredients recognition, is a confusing and difficult task for both computers and humans. There is a long way to go. 
 
 <h3>References</h3>
 [1] Chen, J., & Ngo, C. W. (2016, October). Deep-based ingredient recognition for cooking recipe retrieval. In Proceedings of the 2016 ACM <i> on Multimedia Conference </i> (pp. 32-41). ACM.
@@ -117,10 +127,11 @@ Interestingly, VGG16 and Resent152 offer different advantages in different aspec
 <br>
 [3] Simonyan, K., & Zisserman, A. (2014). Very deep convolutional networks for large-scale image recognition. <i>arXiv preprint arXiv:1409.1556.</i>
 <br>
-[4] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In <i>CVPR </i> (pp. 770-778).
+[4] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In <i>CVPR </i> (pp. 770-778).<br>
+[5] Van Asch, V. (2013). Macro-and micro-averaged evaluation measures [[basic draft]].
 
 <br><br><br>
-GitHub link: <a href="https://github.com/wang120332076/cv_project">https://github.com/wang120332076/cv_project</a> 记得把权限公开
+GitHub link: <a href="https://github.com/wang120332076/cv_project">https://github.com/wang120332076/cv_project</a>
   <hr>
   <footer> 
   <p>© Chenhao Wang, Mengfan Wang, Yao Xiao, Yuxian Ye</p>
